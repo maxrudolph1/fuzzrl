@@ -1,0 +1,8 @@
+setup.py
+jpeg_encode/__init__.py
+jpeg_encode.egg-info/PKG-INFO
+jpeg_encode.egg-info/SOURCES.txt
+jpeg_encode.egg-info/dependency_links.txt
+jpeg_encode.egg-info/top_level.txt
+jpeg_encode/envs/__init__.py
+jpeg_encode/envs/jpeg_encode.py
