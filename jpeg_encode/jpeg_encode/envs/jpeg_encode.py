@@ -75,19 +75,20 @@ class JPEGEncode(gym.Env):
         super().reset(seed=seed)
         self.convs = 0
         
-        self.img = torch.randint(255, (64, 64), dtype=torch.uint8)
+        self.img = np.random.randint(low=0, high=255, size=(64, 64))
 
         
         if self.state_mode == 'img':
-            self.stacked_img = torch.stack([self.img, self.img, self.img], dim=2)
-            return self.stacked_img.numpy(), {}
+            self.stacked_img = np.stack([self.img, self.img, self.img], axis=2)
+            return self.stacked_img, {}
         else:
-            return self.img.numpy().flatten(), {}
+            return self.img.flatten(), {}
         
 
 
 
     def step(self, action):
+        # print(action)
         
         kernel_len = len(action)
         kernel_width = int(math.sqrt(kernel_len//2))
@@ -95,8 +96,11 @@ class JPEGEncode(gym.Env):
         kernel2 = action[kernel_len//2:].reshape(kernel_width, kernel_width)
         # self.img = torch.stack([self.img, self.img, self.img], dim=0)
 
+        self.img_prev = self.img
+        
         self.img = scipy.signal.convolve2d(self.img, kernel1, mode='same')
-    
+        self.img[self.img < 0] = 0
+        
         self.img = scipy.signal.convolve2d(self.img, kernel2, mode='same')
         
         self.img = self.img.clip(0, 255).astype(np.uint8)
@@ -112,8 +116,19 @@ class JPEGEncode(gym.Env):
         
         if self.render_mode == "human":
             self.render()
-            
+        
+        diff = (self.img- self.img_prev).flatten()
+        
+        diff_hist, _ = np.histogram(diff, bins=256)
+        diff_hist = diff_hist.astype(np.float32)
+        diff_hist /= float(diff_hist.sum())
+        
+        
+        
+        
+        
         reward = enc_end - enc_start
+        # reward = scipy.stats.entropy(diff_hist, base=2)
         if self.convs > self.max_convs:
             done = True
         else:

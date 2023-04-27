@@ -1,11 +1,7 @@
-import glob
-import os.path as pt
-import io
-
 import numpy as np
-from PIL import Image
-import simplejpeg
-import time
+# from PIL import Image
+# import simplejpeg
+# import time
 
 
 
@@ -21,13 +17,12 @@ def main():
     # for subsampling, code in (('422', 1), ('420', 2), ('440', 1), ('411', 2)):
     for i in range(100):
         # encode with simplejpeg, decode with Pillow
-        prev = (time.time())
+
         
         # write a timing function to time the encoding and decoding
         
-        encoded = simplejpeg.encode_jpeg(im[i, :,:], 85, colorsubsampling='422')
-        post = (time.time())
-        print(prev - post)
+        # encoded = simplejpeg.encode_jpeg(im[i, :,:], 85, colorsubsampling='422')
+
         # bio = io.BytesIO(encoded)
         # decoded = np.array(Image.open(bio))
         # assert 0 < mean_absolute_difference(im, decoded) < 50, subsampling
@@ -37,6 +32,7 @@ def main():
         # # pil_im.save(bio, format='JPEG', quality=85, subsampling=code)
         # decoded = simplejpeg.decode_jpeg(bio.getbuffer())
         # assert 0 < mean_absolute_difference(im, decoded) < 50, subsampling
+        pass
 
 if "__main__" == __name__:
     main()

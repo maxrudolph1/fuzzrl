@@ -80,3 +80,11 @@ register(
      max_episode_steps=10,
      reward_threshold=200,
 )
+
+register(
+     id="FuzzGym-v0",
+     entry_point="fuzzgym.envs.fuzzgym:FuzzGym",
+     kwargs={"continuous": True, "state_mode": "img"},
+     max_episode_steps=10,
+     reward_threshold=200,
+)

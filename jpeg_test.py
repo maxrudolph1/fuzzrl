@@ -9,21 +9,23 @@ import pylint_runner
 
 
 
-result = pylint_runner.run(['--enable=branch-coverage', 'djpeg-py.py', 'main'])
+# result = pylint_runner.run(['--enable=branch-coverage', 'djpeg-py.py', 'main'])
 
 
 
-'''
+
 
 # bashcomand = "djpeg test.jpeg"
+
 cmd = 'coverage run --branch djpeg-py.py DSC_3459.JPG'
+cmd = 'coverage run --branch simplejpeg_test.py'
 subprocess.run(cmd.split(" "), stdout=subprocess.PIPE)
+
 cmd = 'coverage report -m'
 results = subprocess.run(cmd.split(" "), capture_output=True, text=True)
 
-print(results.stdout)
+# print(results.stdout)
 # cov.stop()
 # cov.save()
 
 # cov.html_report()
-'''

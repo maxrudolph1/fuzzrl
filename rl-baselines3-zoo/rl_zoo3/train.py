@@ -15,6 +15,7 @@ from stable_baselines3.common.utils import set_random_seed
 import rl_zoo3.import_envs  # noqa: F401 pytype: disable=import-error
 from rl_zoo3.exp_manager import ExperimentManager
 from rl_zoo3.utils import ALGOS, StoreDict
+import yaml
 
 
 def train() -> None:
@@ -111,6 +112,9 @@ def train() -> None:
         default=[],
         help="Additional external Gym environment package modules to import (e.g. gym_minigrid)",
     )
+    parser.add_argument(
+        "--env-kwargs-custom", type=str, default='')#, nargs="+", action=StoreDict, help="Optional keyword argument to pass to the env constructor"
+    # )
     parser.add_argument(
         "--env-kwargs", type=str, nargs="+", action=StoreDict, help="Optional keyword argument to pass to the env constructor"
     )
@@ -222,6 +226,13 @@ def train() -> None:
             save_code=True,  # optional
         )
         args.tensorboard_log = f"runs/{run_name}"
+        
+    if len(args.env_kwargs_custom) < 1:
+        passed_in_kwargs = args.env_kwargs
+    else:
+        with open(args.env_kwargs_custom, 'r') as f:
+            data = yaml.safe_load(f)
+        passed_in_kwargs = data
 
     exp_manager = ExperimentManager(
         args,
@@ -234,7 +245,7 @@ def train() -> None:
         args.eval_episodes,
         args.save_freq,
         args.hyperparams,
-        args.env_kwargs,
+        passed_in_kwargs, #env_kwargs_dict, #args.env_kwargs,
         args.trained_agent,
         args.optimize_hyperparameters,
         args.storage,

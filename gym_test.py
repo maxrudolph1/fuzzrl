@@ -1,9 +1,11 @@
 import gymnasium as gym
 import jpeg_encode
+import fuzzgym
 import numpy as np
 import torch
 from matplotlib import pyplot as plt
-env = gym.make("JPEGEncode-v0")
+import time
+env = gym.make("FuzzGym-v0")
 
 
 
@@ -16,13 +18,13 @@ a = np.array([1,2,1,2,4,2,1,2,1,1,2,1,2,4,2,1,2,1])/16
 a -= a.mean()
 print(a.sum())
 for i in range(9):
-    # a = torch.rand((18,))
-    s, r, done, truncated, info = env.step(a)
+    k = time.time()
+    s, r, done, truncated, info = env.step(np.random.random((64 * 64)))
     total_reward += r
-    
+
     steps += 1
-    plt.subplot(3,3,i+1)
-    plt.imshow(s)
+    # print(i)
+
     if done:
         break
     
